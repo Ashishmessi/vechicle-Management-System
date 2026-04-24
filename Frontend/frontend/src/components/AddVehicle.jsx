@@ -1,47 +1,88 @@
 import { useState } from "react";
 import axios from "axios";
+import Sidebar from "./Sidebar";
+import { useNavigate } from "react-router-dom";
 
 function AddVehicle() {
   const [data, setData] = useState({
     ownerName: "",
-    vehicleNumber: "",
+    regNumber: "",
     vehicleType: "",
-    serviceHistory: ""
+    rentPerHour: "",
+    lastServiceDate: "",
+    nextServiceDate: ""
   });
 
-  const handleChange = (e) => {
-    setData({...data, [e.target.name]: e.target.value});
-  };
+  const navigate = useNavigate();
 
-  const handleSubmit = async () => {
-    await axios.post("http://localhost:5000/api/vehicles/add", data);
-    alert("Vehicle Added");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await axios.post("http://localhost:5000/api/vehicles", data);
+
+    alert("Vehicle Added Successfully");
+    navigate("/vehicles");
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow mb-8">
+    <div className="d-flex">
+      <Sidebar />
 
-  <h2 className="text-xl font-semibold mb-4">Add Vehicle</h2>
+      <div className="container mt-4">
+        <div className="card p-4 shadow">
+          <h3 className="mb-3">➕ Add Vehicle</h3>
 
-  <div className="grid grid-cols-4 gap-4">
+          <form onSubmit={handleSubmit}>
 
-    <input className="border p-2 rounded-lg focus:outline-blue-500" placeholder="Owner Name" name="ownerName" onChange={handleChange} />
+            <div className="mb-3">
+              <label>Owner Name</label>
+              <input className="form-control"
+                onChange={e => setData({...data, ownerName: e.target.value})} />
+            </div>
 
-    <input className="border p-2 rounded-lg focus:outline-blue-500" placeholder="Vehicle No" name="vehicleNumber" onChange={handleChange} />
+            <div className="mb-3">
+              <label>Registration Number</label>
+              <input className="form-control"
+                onChange={e => setData({...data, regNumber: e.target.value})} />
+            </div>
 
-    <input className="border p-2 rounded-lg focus:outline-blue-500" placeholder="Type (Car/Bike)" name="vehicleType" onChange={handleChange} />
+            <div className="mb-3">
+              <label>Vehicle Type</label>
+              <select className="form-control"
+                onChange={e => setData({...data, vehicleType: e.target.value})}>
+                <option>Select</option>
+                <option>Bike</option>
+                <option>Scooty</option>
+                <option>Car</option>
+              </select>
+            </div>
 
-    <input className="border p-2 rounded-lg focus:outline-blue-500" placeholder="Service" name="serviceHistory" onChange={handleChange} />
+            <div className="mb-3">
+              <label>Rent per Hour (₹)</label>
+              <input type="number" className="form-control"
+                onChange={e => setData({...data, rentPerHour: e.target.value})} />
+            </div>
 
-  </div>
+            <div className="mb-3">
+              <label>Last Service Date</label>
+              <input type="date" className="form-control"
+                onChange={e => setData({...data, lastServiceDate: e.target.value})} />
+            </div>
 
-  <button
-    onClick={handleSubmit}
-    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-    Add Vehicle
-  </button>
+            <div className="mb-3">
+              <label>Next Service Date</label>
+              <input type="date" className="form-control"
+                onChange={e => setData({...data, nextServiceDate: e.target.value})} />
+            </div>
 
-</div>
+            <button className="btn btn-success w-100">
+              Add Vehicle
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }
 

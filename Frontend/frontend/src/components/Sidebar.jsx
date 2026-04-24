@@ -1,21 +1,26 @@
+import { Link } from "react-router-dom";
+
 function Sidebar() {
   return (
-    <div className="h-full bg-gradient-to-b from-blue-900 to-blue-700 text-white p-6 shadow-lg">
+    <div className="bg-dark text-white p-3" style={{ width: "220px", height: "100vh" }}>
+      <h4>🚗 Admin</h4>
 
-      <h1 className="text-3xl font-bold mb-10 text-center">🚗 VMS</h1>
+      <Link to="/dashboard" className="d-block text-white mt-3">Dashboard</Link>
+      <Link to="/vehicles" className="d-block text-white mt-2">Vehicles</Link>
+      <Link to="/add-vehicle" className="d-block text-white mt-2">Add Vehicle</Link>
+      <Link to="/rentals" className="d-block text-white mt-2">
+  Rentals
+</Link>
+<Link to="/add-rental" className="d-block text-white mt-2">
+  Start Rental
+</Link>
 
-      <ul className="space-y-4">
-        <li className="p-3 rounded-lg hover:bg-blue-600 cursor-pointer transition">
-          Dashboard
-        </li>
-        <li className="p-3 rounded-lg hover:bg-blue-600 cursor-pointer transition">
-          Vehicles
-        </li>
-        <li className="p-3 rounded-lg hover:bg-blue-600 cursor-pointer transition">
-          Add Vehicle
-        </li>
-      </ul>
-
+<Link to="/service" className="d-block text-white mt-2">
+  Service
+</Link>
     </div>
+    
   );
 }
+
+export default Sidebar;

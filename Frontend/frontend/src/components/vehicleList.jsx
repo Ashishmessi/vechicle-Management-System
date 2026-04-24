@@ -1,61 +1,57 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Sidebar from "./Sidebar";
+import { Link } from "react-router-dom";
 
-function VehicleList() {
-  const [vehicles, setVehicles] = useState([]);
+function Vehicles() {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/vehicles")
-      .then(res => setVehicles(res.data));
+      .then(res => setData(res.data));
   }, []);
 
-  const deleteVehicle = async (id) => {
-    await axios.delete(`http://localhost:5000/api/vehicles/delete/${id}`);
-    setVehicles(vehicles.filter(v => v._id !== id));
-  };
-
   return (
-   <div className="bg-white p-6 rounded-2xl shadow">
+    <div className="d-flex">
+      <Sidebar />
 
-  <h2 className="text-xl font-semibold mb-4">Vehicle List</h2>
+      <div className="container mt-4">
 
-  <table className="w-full border-collapse">
+        {/* 🔥 HEADER + ADD BUTTON */}
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h3>🚗 Vehicles</h3>
 
-    <thead>
-      <tr className="bg-gray-100 text-left">
-        <th className="p-3">Owner</th>
-        <th className="p-3">Number</th>
-        <th className="p-3">Type</th>
-        <th className="p-3">Service</th>
-        <th className="p-3">Action</th>
-      </tr>
-    </thead>
+          <Link to="/add-vehicle" className="btn btn-primary">
+            + Add Vehicle
+          </Link>
+        </div>
 
-    <tbody>
-      {vehicles.map(v => (
-        <tr key={v._id} className="border-t hover:bg-gray-50">
+        {/* 📋 TABLE */}
+        <div className="card shadow p-3">
+          <table className="table table-striped text-center">
+            <thead className="table-dark">
+              <tr>
+                <th>Owner</th>
+                <th>Reg Number</th>
+                <th>Rent (₹/hr)</th>
+              </tr>
+            </thead>
 
-          <td className="p-3">{v.ownerName}</td>
-          <td className="p-3">{v.vehicleNumber}</td>
-          <td className="p-3">{v.vehicleType}</td>
-          <td className="p-3">{v.serviceHistory}</td>
+            <tbody>
+              {data.map(v => (
+                <tr key={v._id}>
+                  <td>{v.ownerName}</td>
+                  <td>{v.regNumber}</td>
+                  <td>₹{v.rentPerHour}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          <td className="p-3">
-            <button
-              onClick={() => deleteVehicle(v._id)}
-              className="bg-red-500 text-white px-4 py-1 rounded-lg hover:bg-red-600">
-              Delete
-            </button>
-          </td>
-
-        </tr>
-      ))}
-    </tbody>
-
-  </table>
-
-</div>
+      </div>
+    </div>
   );
 }
 
-export default VehicleList;
+export default Vehicles;
